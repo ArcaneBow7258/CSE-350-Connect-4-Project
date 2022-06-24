@@ -1,22 +1,36 @@
 import pygame
 import sys
+import numpy
+#Beginning Interfacte (Menu, butotns, etc) Kevin
 
-# Initialize all imported pygame modules (such as draw, sprite, etc.)
+#CheckWin  #CheckValid  #Place (update board variable)  Nikhil
+#_Init__ -> Board Image for Game Alvin ??
+#Update
+#Player Stuff, brebones of cpu? Renz
+
+#-> Testing Evniroment? Just using console? Aggeraget everything? mohammad
+#alert? mohammad
+
+
+#SCREEN STUFF
+#Initialize all imported pygame modules (such as draw, sprite, etc.)
+
 pygame.init()
 
 # Constants for the screen
-S_WIDTH = 200
-S_HEIGHT = 200
+S_WIDTH = 640
+S_HEIGHT = 640
 
 # This method returns a pygame "surface" and acts as our window or display
 screen = pygame.display.set_mode((S_WIDTH, S_HEIGHT))
 
 # Sets the caption of our window
-pygame.display.set_caption("CSE350 Lab 3")
+pygame.display.set_caption("CSE350 Team 10 Connect-4")
 
 my_font = pygame.font.SysFont("monospace", 75)
 
-"""Initialize Sprites"""
+#Players to ask for input
+#Also acts as CPU
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super(Player, self).__init__()
@@ -24,12 +38,51 @@ class Player(pygame.sprite.Sprite):
         self.surface.fill((255, 0, 0))
         #self.surface = my_font.render("Hello", True, (255, 255, 255))
         self.rect = self.surface.get_rect(center=(S_WIDTH/2, S_HEIGHT/2))
-
+    def move():
+        
     def update(self, x, y):
         self.rect.move_ip(x, y)
+class Game:
+    #intializing variables
+    board = numpy.zeros((6,7), int)
+    record = []
+    players = []
+    #Intialize Board Variables, determine state of board?
+    #Read variables, and create image of board
+    
+    def __init__(self, player1, player2, record):
+        players = [player1, player2]
+        
+    #Update board image
+    #reread board variable to update display
+    #PYGAME LATER
+    def update():
+
+    #Ensures player puts a valid move
+        
+    def checkValid(column):
 
 
-p1 = Player()
+    #After valid placement, check for win by player
+        
+    def checkWin():
+    
+    #placing piece in appropiate column
+    #Determinte playeer but using length(record) % 2 + 1 ??
+    #Whoever does it will figure it out :)
+        
+    def place(column):
+
+    #Create post-game menu
+    def alert():
+
+    #Starts review game
+    def review():
+
+    
+        
+
+#g = Game()
 
 # Begin Event loop
 run = True
