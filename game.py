@@ -10,8 +10,9 @@ class Game:
 
     #Intialize Board Variables, determine state of board?
     #Read variables, and create image of board
-    def __init__(self):
+    def __init__(self, player1, player2):
         self.board = np.zeros((6,7), dtype=int)
+        self.players = [player1, player2]
 
     def printBoard(self):
         print(np.flip(self.board, 0))
@@ -32,7 +33,8 @@ class Game:
 
 
     #After valid placement, check for win by player
-    def checkWin(self, chip):
+    def checkWin(self):
+        chip = self.turn
         #horizontal check
         for c in range(4):
             for r in range(6):
@@ -45,13 +47,13 @@ class Game:
                 if self.board[r][c] == chip and self.board[r+1][c] == chip and self.board[r+2][c] == chip and self.board[r+3][c] == chip:
                     return True
         
-        #positive diagonal check
+        #upward diagonal check
         for c in range(4):
             for r in range(3):
                 if self.board[r][c] == chip and self.board[r+1][c+1] == chip and self.board[r+2][c+2] == chip and self.board[r+3][c+3] == chip:
                     return True
         
-        #negative diagonal check
+        #downward diagonal check
         for c in range(4):
             for r in range(3, 6):
                 if self.board[r][c] == chip and self.board[r-1][c-1] == chip and self.board[r-2][c-2] == chip and self.board[r-3][c-3] == chip:
@@ -68,7 +70,7 @@ class Game:
             return False
         
         row = self.checkOpen(col)               #find earliest open row
-        self.board[row][col] = chip             #"insert" piece
+        self.board[row][col] = self.turn        #place piece
         self.printBoard()                       #print board
         self.record.append((row, col))          #add move to the match record
         return True
@@ -82,21 +84,24 @@ class Game:
         pass
     
 
-game = Game()
 p1 = player.Player(False, (255, 0, 0))
 p2 = player.Player(False, (0, 0, 255))
+game = Game(p1, p2)
 game.printBoard()
-run = True
-for i in range(21):
+pvpGame = True
+while pvpGame:
     while game.turn == 1:
-        chip = 1
-        game.place(p1, chip)
-        if game.checkWin(chip):
+        game.place(p1)
+        if game.checkWin():
             print("Player 1 Wins!")
+            pvpGame = False
             break
     while game.turn == 2:
-        chip = 2
-        game.place(p2, chip)
-        if game.checkWin(chip):
+        game.place(p2)
+        if game.checkWin():
             print("Player 2 Wins!")
+            pvpGame = False
             break
+    if len(game.record) == 42 and pvpGame:
+        print("Draw!")
+        pvpGame = False
