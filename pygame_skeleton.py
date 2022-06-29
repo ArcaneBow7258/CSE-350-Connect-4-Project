@@ -18,8 +18,8 @@ import numpy
 pygame.init()
 
 # Constants for the screen
-S_WIDTH = 640
-S_HEIGHT = 640
+S_WIDTH = 720
+S_HEIGHT = 720
 
 # This method returns a pygame "surface" and acts as our window or display
 screen = pygame.display.set_mode((S_WIDTH, S_HEIGHT))
