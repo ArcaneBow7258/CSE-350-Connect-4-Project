@@ -3,8 +3,8 @@ import playerText as player
 #import player
 import pygame
 pygame.init()
-S_WIDTH = 720
-S_HEIGHT = 720
+S_WIDTH = 600
+S_HEIGHT = 600
 class Game:
     #intializing variables
     record = []
@@ -40,9 +40,11 @@ class Game:
     def checkValid(self, column):
         print(type(column))
         if (self.board[5][column] == 0):
+            self.clearText()
             return False
         else:
             print("Invalid move")
+            self.alert()
             return True
 
     #assumes there is an open spot in the column, so always use self.checkValid() first
@@ -114,8 +116,21 @@ class Game:
         screen.blit(self.boardImage, (self.boardOffset,0))
         pygame.display.update()
     #Create post-game menu
-    def alert():
-        pass
+    def alert(self):
+        font = pygame.font.Font('freesansbold.ttf', 30)
+        text = font.render("Invalid move", True, (255,0,0), (255,255,255))
+        textRect = text.get_rect()
+        textRect.center=(S_WIDTH/2, S_HEIGHT-100)
+        screen.blit(text, textRect)
+        pygame.display.update()
+    def clearText(self):
+        font = pygame.font.Font('freesansbold.ttf', 30)
+        text = font.render("Invalid move", True, (255,255,255), (255,255,255))
+        textRect = text.get_rect()
+        textRect.center=(S_WIDTH/2, S_HEIGHT-100)
+        screen.blit(text, textRect)
+        pygame.display.update()
+        
 
     #Starts review game
     def review():
@@ -151,3 +166,4 @@ while pvpGame:
     if len(game.record) == 42 and pvpGame:
         print("Draw!")
         pvpGame = False
+    
