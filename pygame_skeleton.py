@@ -1,6 +1,8 @@
 import pygame
 import sys
 import numpy
+import game
+import player
 #Beginning Interfacte (Menu, butotns, etc) Kevin
 
 #CheckWin  #CheckValid  #Place (update board variable)  Nikhil
@@ -17,69 +19,25 @@ import numpy
 
 pygame.init()
 
-# Constants for the screen
-S_WIDTH = 720
-S_HEIGHT = 720
-
-# This method returns a pygame "surface" and acts as our window or display
 screen = pygame.display.set_mode((S_WIDTH, S_HEIGHT))
-
-# Sets the caption of our window
+screen.fill((255,255,255))
 pygame.display.set_caption("CSE350 Team 10 Connect-4")
-
 my_font = pygame.font.SysFont("monospace", 75)
 
-#Players to ask for input
-#Also acts as CPU
-class Player(pygame.sprite.Sprite):
-    def __init__(self):
-        super(Player, self).__init__()
-        self.surface = pygame.Surface((25, 25))
-        self.surface.fill((255, 0, 0))
-        #self.surface = my_font.render("Hello", True, (255, 255, 255))
-        self.rect = self.surface.get_rect(center=(S_WIDTH/2, S_HEIGHT/2))
-    def move():
-        
-    def update(self, x, y):
-        self.rect.move_ip(x, y)
-class Game:
-    #intializing variables
-    board = numpy.zeros((6,7), int)
-    record = []
-    players = []
-    #Intialize Board Variables, determine state of board?
-    #Read variables, and create image of board
-    
-    def __init__(self, player1, player2, record):
-        players = [player1, player2]
-        
-    #Update board image
-    #reread board variable to update display
-    #PYGAME LATER
-    def update():
+#player vars
+p1 = player.Player(False, (255, 0, 0))
+p2 = player.Player(False, (255, 255, 0))
 
-    #Ensures player puts a valid move
-        
-    def checkValid(column):
+#Initialize Game
+game = game.Game(p1, p2)
+game.printBoard()
 
+rune = True
+while run:
 
-    #After valid placement, check for win by player
-        
-    def checkWin():
-    
-    #placing piece in appropiate column
-    #Determinte playeer but using length(record) % 2 + 1 ??
-    #Whoever does it will figure it out :)
-        
-    def place(column):
-
-    #Create post-game menu
-    def alert():
-
-    #Starts review game
-    def review():
-
-    
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
         
 
 #g = Game()

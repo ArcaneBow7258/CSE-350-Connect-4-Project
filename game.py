@@ -1,5 +1,5 @@
 import numpy as np
-import playerText as player
+import player
 #import player
 import pygame
 pygame.init()
@@ -17,7 +17,7 @@ class Game:
     B_HEIGHT =square*6
     boardOffset =(S_WIDTH - B_WIDTH)/2
     boardImage = pygame.Surface((B_WIDTH, B_HEIGHT))
-    boardImage.fill((255, 255, 0))
+    boardImage.fill((0, 0, 255))
     
     #Intialize Board Variables, determine state of board?
     #Read variables, and create image of board
@@ -100,7 +100,7 @@ class Game:
     #Redraws the board, interating through the board variable and coloring in the circles
     def reDraw(self):
         b = np.flip(self.board, 0)
-        self.boardImage.fill((255, 255, 0))
+        self.boardImage.fill((0, 0, 255))
         for r in range(0,6):
             for c in range(0,7):
                 chip =  b[r][c] - 1
@@ -113,6 +113,7 @@ class Game:
                 
         screen.blit(self.boardImage, (self.boardOffset,0))
         pygame.display.update()
+
     #Create post-game menu
     def alert():
         pass
@@ -120,34 +121,46 @@ class Game:
     #Starts review game
     def review():
         pass
-#Beginning image? menu?
 
+#Beginning image? menu?
 screen = pygame.display.set_mode((S_WIDTH, S_HEIGHT))
 screen.fill((255,255,255))
 pygame.display.set_caption("CSE350 Team 10 Connect-4")
 my_font = pygame.font.SysFont("monospace", 75)
+
 #player vars
 p1 = player.Player(False, (255, 0, 0))
-p2 = player.Player(False, (0, 0, 255))
+p2 = player.Player(False, (255, 255, 0))
+
 #Initialize Game
 game = Game(p1, p2)
 game.printBoard()
 
-pvpGame = True
-while pvpGame:
-    pygame.event.get()
-    while game.turn == 1:
-        game.place(p1)
-        if game.checkWin():
-            print("Player 1 Wins!")
+rune = True
+while run:
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+
+    pvpGame = True
+    while pvpGame:
+        pygame.event.get()
+        while game.turn == 1:
+            game.place(p1)
+            pygame.display.update()
+            if game.checkWin():
+                print("Player 1 Wins!")
+                pvpGame = False
+                break
+        while game.turn == 2:
+            game.place(p2)
+            pygame.display.update()
+            if game.checkWin():
+                print("Player 2 Wins!")
+                pvpGame = False
+                break
+        if len(game.record) == 42 and pvpGame:
+            print("Draw!")
             pvpGame = False
-            break
-    while game.turn == 2:
-        game.place(p2)
-        if game.checkWin():
-            print("Player 2 Wins!")
-            pvpGame = False
-            break
-    if len(game.record) == 42 and pvpGame:
-        print("Draw!")
-        pvpGame = False
+pygame.quit()
