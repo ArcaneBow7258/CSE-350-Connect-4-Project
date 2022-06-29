@@ -32,26 +32,12 @@ p2 = player.Player(False, (255, 255, 0))
 game = game.Game(p1, p2)
 game.printBoard()
 
-rune = True
-while run:
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
-        
-
-#g = Game()
-
 # Begin Event loop
 run = True
 while run:
 
-    """Event handler"""
-    #event = pygame.event.wait()  # This method returns the first element of an event queue, and pauses the screen if there are no events
-
     # There is also event.get(), which returns an iterable of all events added to the queue during that iteration
     for event in pygame.event.get():
-    # Typical events include exiting the window via the X, or pressing the escape key
         if event.type == pygame.QUIT:
             run = False
 
