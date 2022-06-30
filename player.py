@@ -1,4 +1,5 @@
 import random
+import button
 #3rd test
 
 class Player:
@@ -21,13 +22,18 @@ class Player:
                     return 0    #will use min/max algo
         
         else:   #This function probably changes for human when we have a GUI (based on position on screen)
-            action1 = True
-            col = -1
-            while action1:
-                try:
-                    col = int(input("Enter column to place(1-7): ")) - 1
-                    if col in [0, 1, 2, 3, 4, 5, 6]:
-                        action1 = False
-                except:
-                    action1 = True
-            return col
+            for e in pygame.event.get():
+                if click_btn1.isClicked():
+                    return 0
+                if click_btn2.isClicked():
+                    return 1
+                if click_btn3.isClicked():
+                    return 2
+                if click_btn4.isClicked():
+                    return 3
+                if click_btn5.isClicked():
+                    return 4
+                if click_btn6.isClicked():
+                    return 5
+                if click_btn7.isClicked():
+                    return 6

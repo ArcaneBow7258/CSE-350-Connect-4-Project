@@ -1,61 +1,30 @@
 import numpy as np
 import player
-#import player
+import button
 import pygame
-pygame.init()
-S_WIDTH = 720
-S_HEIGHT = 720
+#pygame.init()
 class Game:
-    #intializing variables
-    record = []
-    players = []
-    turn = 1
-    board = np.zeros((6,7), dtype=int)
-    square = 80
-    circleRad = 30
-    B_WIDTH =square*7
-    B_HEIGHT =square*6
-    boardOffset =(S_WIDTH - B_WIDTH)/2
-    boardImage = pygame.Surface((B_WIDTH, B_HEIGHT))
-    boardImage.fill((0, 0, 255))
-    
-    #Intialize Board Variables, determine state of board?
     #Read variables, and create image of board
     def __init__(self, player1, player2):
+        self.record = []
+        self.turn = 1
         self.board = np.zeros((6,7), dtype=int)
         self.players = [player1, player2]
-        
-        
-        #Creating Screen for board
-        
-        
-        
-        self.reDraw()
-        
-        pygame.display.update()
+        self.square = 80
+        self.circleRad = 30
+        self.B_WIDTH =self.square*7
+        self.B_HEIGHT =self.square*6
+
+
+    #prints the board
     def printBoard(self):
         print(np.flip(self.board, 0))
-
-    #Ensures player puts a valid move
-    def checkValid(self, column):
-        print(type(column))
-        if (self.board[5][column] == 0):
-            return False
-        else:
-            print("Invalid move")
-            return True
-
-    #assumes there is an open spot in the column, so always use self.checkValid() first
-    def checkOpen(self, column):
-        for i in range(6):
-            if self.board[i][column] == 0:
-                return i
 
 
     #After valid placement, check for win by player
     def checkWin(self):
         chip = self.turn
-        print(self.board)
+
         #horizontal check
         for c in range(4):
             for r in range(6):
@@ -83,6 +52,43 @@ class Game:
         self.turn = len(self.record) % 2 + 1    #update turn value
         return False
 
+
+    def alert(self):
+        font = pygame.font.Font('freesansbold.ttf', 30)
+        text = font.render("Invalid move", True, (255,0,0), (255,255,255))
+        textRect = text.get_rect()
+        textRect.center=(S_WIDTH/2, S_HEIGHT-100)
+        screen.blit(text, textRect)
+        pygame.display.update()
+
+
+    def clearText(self):
+        font = pygame.font.Font('freesansbold.ttf', 30)
+        text = font.render("Invalid move", True, (255,255,255), (255,255,255))
+        textRect = text.get_rect()
+        textRect.center=(S_WIDTH/2, S_HEIGHT-100)
+        screen.blit(text, textRect)
+        pygame.display.update()
+
+
+        #Ensures player puts a valid move
+    def checkValid(self, column):
+        if (self.board[5][column] == 0):
+            #self.clearText()
+            return False
+        else:
+            print("Invalid move")
+            #self.alert()
+            return True
+
+
+    #assumes there is an open spot in the column, so always use self.checkValid() first
+    def checkOpen(self, column):
+        for i in range(6):
+            if self.board[i][column] == 0:
+                return i
+
+
     #placing piece in appropiate column, returns False if invalid column
     def place(self, player):
         col = player.move()     #player's choice of column
@@ -92,75 +98,23 @@ class Game:
         
         row = self.checkOpen(col)               #find earliest open row
         self.board[row][col] = self.turn        #place piece
-        self.printBoard()                       #print board
-        self.reDraw()
+        self.update(row, col)
         self.record.append((row, col))          #add move to the match record
         
         return True
-    #Redraws the board, interating through the board variable and coloring in the circles
-    def reDraw(self):
-        b = np.flip(self.board, 0)
-        self.boardImage.fill((0, 0, 255))
-        for r in range(0,6):
-            for c in range(0,7):
-                chip =  b[r][c] - 1
-    
-                color = self.players[b[r][c] - 1].color if chip != -1 else (255, 255, 255)
-                c = pygame.draw.circle(self.boardImage,
-                                       color,
-                                       ((self.square - self.circleRad*2)/2 +self.circleRad  + c * self.square, (self.square)/2 + r * self.square),
-                                       self.circleRad)
-                
-        screen.blit(self.boardImage, (self.boardOffset,0))
-        pygame.display.update()
 
-    #Create post-game menu
-    def alert():
-        pass
+
+    #Redraws the board, interacting through the board variable and coloring in the circles
+    def update(self, r, c):
+        color = self.players[self.turn - 1].color
+        pygame.draw.circle(self.boardImage,
+                            color,
+                            (self.square/2 + c * self.square, self.square/2 + (5-r) * self.square),
+                            self.circleRad)
+
+        pygame.display.update((S_WIDTH - self.B_WIDTH)/2 + c * self.square, (S_HEIGHT - self.B_HEIGHT) + (5-r) * self.square, self.square, self.square)
+    
 
     #Starts review game
     def review():
         pass
-
-#Beginning image? menu?
-screen = pygame.display.set_mode((S_WIDTH, S_HEIGHT))
-screen.fill((255,255,255))
-pygame.display.set_caption("CSE350 Team 10 Connect-4")
-my_font = pygame.font.SysFont("monospace", 75)
-
-#player vars
-p1 = player.Player(False, (255, 0, 0))
-p2 = player.Player(False, (255, 255, 0))
-
-#Initialize Game
-game = Game(p1, p2)
-game.printBoard()
-
-rune = True
-while run:
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
-
-    pvpGame = True
-    while pvpGame:
-        pygame.event.get()
-        while game.turn == 1:
-            game.place(p1)
-            pygame.display.update()
-            if game.checkWin():
-                print("Player 1 Wins!")
-                pvpGame = False
-                break
-        while game.turn == 2:
-            game.place(p2)
-            pygame.display.update()
-            if game.checkWin():
-                print("Player 2 Wins!")
-                pvpGame = False
-                break
-        if len(game.record) == 42 and pvpGame:
-            print("Draw!")
-            pvpGame = False
-pygame.quit()
