@@ -3,6 +3,8 @@ import player
 import button
 import pygame
 #pygame.init()
+S_WIDTH = 600
+S_HEIGHT = 600
 class Game:
     #Read variables, and create image of board
     def __init__(self, player1, player2):
@@ -90,24 +92,24 @@ class Game:
 
 
     #placing piece in appropiate column, returns False if invalid column
-    def place(self, player):
-        col = player.move()     #player's choice of column
+    def place(self, col, boardImage):
+        #col = player.move()     #returns the column choice
             
         if self.checkValid(col):           #check if column is closed
             return False
         
         row = self.checkOpen(col)               #find earliest open row
         self.board[row][col] = self.turn        #place piece
-        self.update(row, col)
+        self.update(row, col, boardImage)
         self.record.append((row, col))          #add move to the match record
         
         return True
 
 
     #Redraws the board, interacting through the board variable and coloring in the circles
-    def update(self, r, c):
+    def update(self, r, c, boardImage):
         color = self.players[self.turn - 1].color
-        pygame.draw.circle(self.boardImage,
+        pygame.draw.circle(boardImage,
                             color,
                             (self.square/2 + c * self.square, self.square/2 + (5-r) * self.square),
                             self.circleRad)
