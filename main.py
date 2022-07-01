@@ -1,4 +1,3 @@
-from threading import Timer
 import pygame
 import sys
 import numpy
