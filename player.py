@@ -4,7 +4,8 @@ import button
 
 class Player:
 
-    def __init__(self, isBot, color, difficulty=0):     #color input should be a variable in the format of (###,###,###)
+    def __init__(self, nickname, isBot, color, difficulty=0):     #color input should be a variable in the format of (###,###,###)
+        self.nickname = nickname
         self.isBot = isBot
         self.color = color
         self.difficulty = difficulty

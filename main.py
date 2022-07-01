@@ -1,23 +1,12 @@
+from threading import Timer
 import pygame
 import sys
 import numpy
 import game
 import player
 import button
-#Beginning Interfacte (Menu, butotns, etc) Kevin
-
-#CheckWin  #CheckValid  #Place (update board variable)  Nikhil
-#_Init__ -> Board Image for Game Alvin ??
-#Update
-#Player Stuff, brebones of cpu? Renz
-
-#-> Testing Evniroment? Just using console? Aggeraget everything? mohammad
-#alert? mohammad
-
 
 #SCREEN STUFF
-#Initialize all imported pygame modules (such as draw, sprite, etc.)
-
 pygame.init()
 
 S_WIDTH = 600
@@ -27,8 +16,8 @@ pygame.display.set_caption("CSE350 Team 10 Connect-4")
 my_font = pygame.font.SysFont("monospace", 75)
 
 #player vars
-p1 = player.Player(False, (255, 0, 0))
-p2 = player.Player(False, (255, 255, 0))
+p1 = player.Player("Player 1", False, (255, 0, 0))
+p2 = player.Player("Player 2", False, (255, 255, 0))
 
 #Initialize Game
 game = game.Game(p1, p2)
@@ -73,37 +62,48 @@ while run:
         if click_btn1.isClicked():
             game.place(0, boardImage)
             if game.checkWin():
+                print(f"{game.players[game.turn - 1].nickname} Wins!")
                 run = False
 
         if click_btn2.isClicked():
             game.place(1, boardImage)
             if game.checkWin():
+                print(f"{game.players[game.turn - 1].nickname} Wins!")
                 run = False
 
         if click_btn3.isClicked():
             game.place(2, boardImage)
             if game.checkWin():
+                print(f"{game.players[game.turn - 1].nickname} Wins!")
                 run = False
 
         if click_btn4.isClicked():
             game.place(3, boardImage)
             if game.checkWin():
+                print(f"{game.players[game.turn - 1].nickname} Wins!")
                 run = False
 
         if click_btn5.isClicked():
             game.place(4, boardImage)
             if game.checkWin():
+                print(f"{game.players[game.turn - 1].nickname} Wins!")
                 run = False
 
         if click_btn6.isClicked():
             game.place(5, boardImage)
             if game.checkWin():
+                print(f"{game.players[game.turn - 1].nickname} Wins!")
                 run = False
 
         if click_btn7.isClicked():
             game.place(6, boardImage)
             if game.checkWin():
+                print(f"{game.players[game.turn - 1].nickname} Wins!")
                 run = False
+    
+    if len(game.record) == 42 and run:
+        print("Draw!")
+        run = False
 
 
     pygame.display.update()
