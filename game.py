@@ -2,6 +2,7 @@ import numpy as np
 import player
 import button
 import pygame
+from tkinter import messagebox
 #pygame.init()
 S_WIDTH = 600
 S_HEIGHT = 600
@@ -55,24 +56,8 @@ class Game:
         return False
 
 
-    def alert(self):
-        font = pygame.font.Font('freesansbold.ttf', 30)
-        text = font.render("Invalid move", True, (255,0,0), (255,255,255))
-        textRect = text.get_rect()
-        textRect.center=(S_WIDTH/2, S_HEIGHT-100)
-        screen.blit(text, textRect)
-        pygame.display.update()
-
-
-    def clearText(self):
-        font = pygame.font.Font('freesansbold.ttf', 30)
-        text = font.render("Invalid move", True, (255,255,255), (255,255,255))
-        textRect = text.get_rect()
-        textRect.center=(S_WIDTH/2, S_HEIGHT-100)
-        screen.blit(text, textRect)
-        pygame.display.update()
-
-
+    def alert(self, message):
+        messagebox.showinfo('Connect-Four', message)
         #Ensures player puts a valid move
     def checkValid(self, column):
         if (self.board[5][column] == 0):
@@ -80,7 +65,7 @@ class Game:
             return False
         else:
             print("Invalid move")
-            #self.alert()
+            self.alert("Invalid Move")
             return True
 
 

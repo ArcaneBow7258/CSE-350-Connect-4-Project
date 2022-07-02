@@ -62,46 +62,54 @@ while run:
             game.place(0, boardImage)
             if game.checkWin():
                 print(f"{game.players[game.turn - 1].nickname} Wins!")
+                game.alert(f"{game.players[game.turn - 1].nickname} Wins!")
                 run = False
 
         if click_btn2.isClicked():
             game.place(1, boardImage)
             if game.checkWin():
                 print(f"{game.players[game.turn - 1].nickname} Wins!")
+                game.alert(f"{game.players[game.turn - 1].nickname} Wins!")
                 run = False
 
         if click_btn3.isClicked():
             game.place(2, boardImage)
             if game.checkWin():
                 print(f"{game.players[game.turn - 1].nickname} Wins!")
+                game.alert(f"{game.players[game.turn - 1].nickname} Wins!")
                 run = False
 
         if click_btn4.isClicked():
             game.place(3, boardImage)
             if game.checkWin():
                 print(f"{game.players[game.turn - 1].nickname} Wins!")
+                game.alert(f"{game.players[game.turn - 1].nickname} Wins!")
                 run = False
 
         if click_btn5.isClicked():
             game.place(4, boardImage)
             if game.checkWin():
                 print(f"{game.players[game.turn - 1].nickname} Wins!")
+                game.alert(f"{game.players[game.turn - 1].nickname} Wins!")
                 run = False
 
         if click_btn6.isClicked():
             game.place(5, boardImage)
             if game.checkWin():
                 print(f"{game.players[game.turn - 1].nickname} Wins!")
+                game.alert(f"{game.players[game.turn - 1].nickname} Wins!")
                 run = False
 
         if click_btn7.isClicked():
             game.place(6, boardImage)
             if game.checkWin():
                 print(f"{game.players[game.turn - 1].nickname} Wins!")
+                game.alert(f"{game.players[game.turn - 1].nickname} Wins!")
                 run = False
     
     if len(game.record) == 42 and run:
         print("Draw!")
+        game.alert("Draw!")
         run = False
 
 
