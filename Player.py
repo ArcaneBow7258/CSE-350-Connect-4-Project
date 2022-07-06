@@ -151,7 +151,7 @@ class Player:
         return board
 
 
-    def minimax(self, board, depth, alpha, beta, maximizingPlayer, AI, OPP): #AI = cpu turn number, #OPP = opp turn #
+    def minimax(self, board,  AI, OPP, depth, alpha, beta, maximizingPlayer): #AI = cpu turn number, #OPP = opp turn #
         valid_locations = self.get_valid_locations(board)
         is_terminal = self.is_terminal_node(board)
 
@@ -172,7 +172,7 @@ class Player:
             for col in valid_locations:
                 b_copy = board.copy()
                 self.drop_piece(b_copy, col, AI)
-                new_score = self.minimax(b_copy, depth-1, alpha, beta, False, AI, OPP)[1]
+                new_score = self.minimax(b_copy, AI, OPP, depth-1, alpha, beta, False)[1]
                 if new_score > value:
                     value = new_score
                     column = col
@@ -187,7 +187,7 @@ class Player:
             for col in valid_locations:
                 b_copy = board.copy()
                 self.drop_piece(b_copy, col, OPP)
-                new_score = self.minimax(b_copy, depth-1, alpha, beta, True, AI, OPP)[1]
+                new_score = self.minimax(b_copy, AI, OPP, depth-1, alpha, beta, True)[1]
                 if new_score < value:
                     value = new_score
                     column = col
@@ -197,7 +197,7 @@ class Player:
             return column, value
             
 
-    def move(self):
+    def move(self, board, turn):
         if(self.isBot):
             match self.difficulty:  #Potentially pass in a list of available columns to optimize
                 case 1:
@@ -206,7 +206,10 @@ class Player:
                 case 2:
                     return 0    #Will use min/max algo
                 case 3:
-                    return 0    #will use min/max algo
+                    if(turn == 1):
+                        opp = 0
+                    col, score = self.minimax(board, turn, opp, depth=5, alpha=-math.inf, beta=math.inf, maximizingPlayer=True)
+                    return col
         
         else:   #This function probably changes for human when we have a GUI (based on position on screen)
             action1 = True
