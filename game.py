@@ -3,6 +3,7 @@ import player
 import button
 import pygame
 from tkinter import messagebox
+from tkinter.messagebox import askyesno
 #pygame.init()
 S_WIDTH = 600
 S_HEIGHT = 600
@@ -59,6 +60,13 @@ class Game:
     def alert(self, message):
         messagebox.showinfo('Connect-Four', message)
         #Ensures player puts a valid move
+
+    def askForReview(self):
+        answer = askyesno(title='Review Game?', message='Would you like to review this game?')
+        if(answer):
+            self.alert("review game...")
+            return True
+        return False
     def checkValid(self, column):
         if (self.board[5][column] == 0):
             #self.clearText()
@@ -103,5 +111,18 @@ class Game:
     
 
     #Starts review game
-    def review():
-        pass
+    def review(self, player1, player2, boardImage, record):
+        #fills every square on the board with an empty space
+        for r in range(6):
+            for c in range(7):
+                pygame.draw.circle(boardImage,
+                                    (0, 0, 0),
+                                    (self.square/2 + c * self.square, self.square/2 + r *self.square),
+                                    self.circleRad)
+        self.turn = 1
+        self.board = np.zeros((6,7), dtype=int)
+        self.players = [player1, player2]
+        self.square = 80
+        self.circleRad = 30
+        self.B_WIDTH =self.square*7
+        self.B_HEIGHT =self.square*6
