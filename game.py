@@ -2,7 +2,7 @@ import numpy as np
 import player
 import button
 import pygame
-from tkinter import messagebox
+import tkinter 
 from tkinter.messagebox import askyesno
 #pygame.init()
 S_WIDTH = 600
@@ -10,6 +10,8 @@ S_HEIGHT = 600
 class Game:
     #Read variables, and create image of board
     def __init__(self, player1, player2):
+        self.tk = tkinter.Tk()
+        self.tk.withdraw()
         self.record = []
         self.turn = 1
         self.board = np.zeros((6,7), dtype=int)
@@ -58,7 +60,7 @@ class Game:
 
 
     def alert(self, message):
-        messagebox.showinfo('Connect-Four', message)
+        tkinter.messagebox.showinfo('Connect-Four', message)
         #Ensures player puts a valid move
 
     def askForReview(self):
