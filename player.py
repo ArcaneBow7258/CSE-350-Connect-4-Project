@@ -207,6 +207,10 @@ class Player:
                 col2, score = self.minimax(board, turn, opp, depth=5, alpha=-math.inf, beta=math.inf, maximizingPlayer=True)
 
                 col = random.choice([col1, col2])
+                if(col == col1):
+                    print("random")
+                else:
+                    print("minmax")
                 return col
 
 
