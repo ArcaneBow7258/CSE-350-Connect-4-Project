@@ -15,8 +15,11 @@ pygame.display.set_caption("CSE350 Team 10 Connect-4")
 my_font = pygame.font.SysFont("monospace", 75)
 
 #player vars
+
 p1 = player.Player("Player 1", False, (255, 0, 0))
 p2 = player.Player("Player 2", False, (255, 255, 0))
+
+
 
 #Initialize Game
 game = game.Game(p1, p2)
@@ -42,9 +45,51 @@ for r in range(6):
                             (game.square/2 + c * game.square, game.square/2 + r * game.square),
                             game.circleRad)
 
+
 # Begin Event loop
 review = False
 run = True
+
+
+def playTurn(game, col, run, review, screen):
+    if(game.players[game.turn - 1].isBot == False):
+        game.place(col, boardImage)
+        screen.fill((0,0,0))
+        screen.blits(((boardImage, boardTopLeft), (clickImage, click_btn1.rect.topleft), 
+                    (clickImage, click_btn2.rect.topleft), (clickImage, click_btn3.rect.topleft), 
+                    (clickImage, click_btn4.rect.topleft), (clickImage, click_btn5.rect.topleft), 
+                    (clickImage, click_btn6.rect.topleft), (clickImage, click_btn7.rect.topleft)))
+        pygame.display.update()
+        if game.checkWin():
+            print(f"{game.players[game.turn - 1].nickname} Wins!")
+            game.alert(f"{game.players[game.turn - 1].nickname} Wins!")
+            if not(game.askForReview()):
+                run = False
+            game.review(p1, p2, boardImage,game.record)
+            review = True
+
+    return run, review
+
+def playCPU(game, run, review, screen):
+    col = game.players[game.turn - 1].move(game.turn, game.board)
+    game.place(col, boardImage)
+    screen.fill((0,0,0))
+    screen.blits(((boardImage, boardTopLeft), (clickImage, click_btn1.rect.topleft), 
+                (clickImage, click_btn2.rect.topleft), (clickImage, click_btn3.rect.topleft), 
+                (clickImage, click_btn4.rect.topleft), (clickImage, click_btn5.rect.topleft), 
+                (clickImage, click_btn6.rect.topleft), (clickImage, click_btn7.rect.topleft)))
+    pygame.display.update()
+    if game.checkWin():
+        print(f"{game.players[game.turn - 1].nickname} Wins!")
+        game.alert(f"{game.players[game.turn - 1].nickname} Wins!")
+        if not(game.askForReview()):
+            run = False
+        game.review(p1, p2, boardImage,game.record)
+        review = True
+    
+    return run, review
+
+
 while run:
     
         
@@ -62,76 +107,34 @@ while run:
             run = False
     
         if click_btn1.isClicked():
-            game.place(0, boardImage)
-            if game.checkWin():
-                print(f"{game.players[game.turn - 1].nickname} Wins!")
-                game.alert(f"{game.players[game.turn - 1].nickname} Wins!")
-                if not(game.askForReview()):
-                    run = False
-                game.review(p1, p2, boardImage,game.record)
-                review = True
+            run, review = playTurn(game, 0, run, review, screen)
 
         if click_btn2.isClicked():
-            game.place(1, boardImage)
-            if game.checkWin():
-                print(f"{game.players[game.turn - 1].nickname} Wins!")
-                game.alert(f"{game.players[game.turn - 1].nickname} Wins!")
-                if not(game.askForReview()):
-                    run = False
-                game.review(p1, p2, boardImage,game.record)
-                review = True
-                
+
+            run, review = playTurn(game, 1, run, review, screen)
+            # col = game.players[game.turn - 1].move(game.turn - 1, game.board)
+            # CPUTurn(col)
 
         if click_btn3.isClicked():
-            game.place(2, boardImage)
-            if game.checkWin():
-                print(f"{game.players[game.turn - 1].nickname} Wins!")
-                game.alert(f"{game.players[game.turn - 1].nickname} Wins!")
-                if not(game.askForReview()):
-                    run = False
-                game.review(p1, p2, boardImage,game.record)
-                review = True
+            run, review = playTurn(game, 2, run, review, screen)
 
         if click_btn4.isClicked():
-            game.place(3, boardImage)
-            if game.checkWin():
-                print(f"{game.players[game.turn - 1].nickname} Wins!")
-                game.alert(f"{game.players[game.turn - 1].nickname} Wins!")
-                if not(game.askForReview()):
-                    run = False
-                game.review(p1, p2, boardImage,game.record)
-                review = True
+            run, review = playTurn(game, 3, run, review, screen)
 
         if click_btn5.isClicked():
-            game.place(4, boardImage)
-            if game.checkWin():
-                print(f"{game.players[game.turn - 1].nickname} Wins!")
-                game.alert(f"{game.players[game.turn - 1].nickname} Wins!")
-                if not(game.askForReview()):
-                    run = False
-                game.review(p1, p2, boardImage,game.record)
-                review = True
+            run, review = playTurn(game, 4, run, review, screen)
 
         if click_btn6.isClicked():
-            game.place(5, boardImage)
-            if game.checkWin():
-                print(f"{game.players[game.turn - 1].nickname} Wins!")
-                game.alert(f"{game.players[game.turn - 1].nickname} Wins!")
-                if not(game.askForReview()):
-                    run = False
-                game.review(p1, p2, boardImage,game.record)
-                review = True
+            run, review = playTurn(game, 5, run, review, screen)
+            
 
         if click_btn7.isClicked():
-            game.place(6, boardImage)
-            if game.checkWin():
-                print(f"{game.players[game.turn - 1].nickname} Wins!")
-                game.alert(f"{game.players[game.turn - 1].nickname} Wins!")
-                if not(game.askForReview()):
-                    run = False
-                game.review(p1, p2, boardImage,game.record)
-                review = True
-    
+            run, review = playTurn(game, 6, run, review, screen)
+
+    if(game.players[game.turn - 1].isBot == True):
+        run, review = playCPU(game, run, review, screen)
+
+
     if len(game.record) == 42 and run:
         print("Draw!")
         game.alert("Draw!")
