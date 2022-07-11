@@ -15,8 +15,11 @@ pygame.display.set_caption("CSE350 Team 10 Connect-4")
 my_font = pygame.font.SysFont("monospace", 75)
 
 #player vars
-p1 = player.Player("Player 1", False, (255, 0, 0), 3)
-p2 = player.Player("Player 2", True, (255, 255, 0), 2)
+
+p1 = player.Player("Player 1", False, (255, 0, 0))
+p2 = player.Player("Player 2", False, (255, 255, 0))
+
+
 
 #Initialize Game
 game = game.Game(p1, p2)
@@ -86,6 +89,7 @@ def playCPU(game, run, review, screen):
     
     return run, review
 
+
 while run:
     
         
@@ -129,6 +133,7 @@ while run:
 
     if(game.players[game.turn - 1].isBot == True):
         run, review = playCPU(game, run, review, screen)
+
 
     if len(game.record) == 42 and run:
         print("Draw!")

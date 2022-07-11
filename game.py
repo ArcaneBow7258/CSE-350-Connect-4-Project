@@ -2,7 +2,11 @@ import numpy as np
 import player
 import button
 import pygame
+
+from tkinter import messagebox
+
 import tkinter 
+
 from tkinter.messagebox import askyesno
 #pygame.init()
 S_WIDTH = 600
@@ -60,8 +64,11 @@ class Game:
 
 
     def alert(self, message):
+
+        messagebox.showinfo('Connect-Four', message)
+
         tkinter.messagebox.showinfo('Connect-Four', message)
-        #Ensures player puts a valid move
+
 
     def askForReview(self):
         answer = askyesno(title='Review Game?', message='Would you like to review this game?')

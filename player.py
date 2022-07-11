@@ -1,4 +1,7 @@
 import random
+
+import button
+
 import math
 
 class Player:
@@ -213,7 +216,6 @@ class Player:
                     print("minmax")
                 return col
 
-
             else:
                     if(turn == 1):
                         opp = 2
@@ -223,5 +225,20 @@ class Player:
                     # print(score)
                     return col
         
-        
+        else:   #This function probably changes for human when we have a GUI (based on position on screen)
+            for e in pygame.event.get():
+                if click_btn1.isClicked():
+                    return 0
+                if click_btn2.isClicked():
+                    return 1
+                if click_btn3.isClicked():
+                    return 2
+                if click_btn4.isClicked():
+                    return 3
+                if click_btn5.isClicked():
+                    return 4
+                if click_btn6.isClicked():
+                    return 5
+                if click_btn7.isClicked():
+                    return 6
 
