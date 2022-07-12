@@ -200,9 +200,13 @@ class Player:
         if(self.isBot):
             if(self.difficulty==1):  #Potentially pass in a list of available columns to optimize
                     col = random.randrange(1,7)
+                    while board[5][col] != 0:
+                          col = random.randrange(1,7)
                     return col
             elif(self.difficulty == 2):
                 col1 = random.randrange(1,7)
+                while board[5][col] != 0:
+                          col = random.randrange(1,7)
                 if(turn == 1):
                         opp = 2
                 else:

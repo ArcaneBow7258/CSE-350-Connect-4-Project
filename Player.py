@@ -1,10 +1,14 @@
 import random
+
+import button
+
 import math
 
 class Player:
 
-    def __init__(self, isBot, color, difficulty=0):
+    def __init__(self, nickname, isBot, color, difficulty=0):
         #color input should be a variable in the format of (###,###,###)
+        self.nickname = nickname
         self.isBot = isBot
         self.color = color
         self.difficulty = difficulty
@@ -41,12 +45,12 @@ class Player:
             
         
 
-    def score_position(self, board, turn):
+    def score_position(self, board, piece):
         score = 0
 
         ## Score center column
         center_array = [int(i) for i in list(board[:, 7//2])]
-        center_count = center_array.count(turn)
+        center_count = center_array.count(piece)
         score += center_count * 3
 
         ##Score Horizontal
@@ -54,62 +58,58 @@ class Player:
             row_array = [int(i) for i in list(board[r,:])]
             for c in range(4):
                 window = row_array[c:c+4]
-                score += self.evaluate_window(window, turn)
+                score += self.evaluate_window(window, piece)
 
         ## Score Vertical
         for c in range(7):
             col_array = [int(i) for i in list(board[:,c])]
             for r in range(3):
                 window = col_array[r:r+4]
-                score += self.evaluate_window(window, turn)
+                score += self.evaluate_window(window, piece)
 
         ## Score negaive sloped diagonal
         for r in range(3):
             for c in range(4):
                 window = [board[r+i][c+i] for i in range(4)]
-                score += self.evaluate_window(window, turn)
+                score += self.evaluate_window(window, piece)
 
         ## Score posiive sloped diagonal
         for r in range(3):
             for c in range(4):
                 window = [board[r+3-i][c+i] for i in range(4)]
-                score += self.evaluate_window(window, turn)
+                score += self.evaluate_window(window, piece)
 
         return score
 
 
     def is_valid_location(self, board, column):
-        ##CHECK IF TOP ROW IS OPEN
-        if (board[0][column] == 0):
-            return True
-        else:
-            return False
+        return board[5][column] == 0
 
-    def winning_move(self, turn):
-        chip = turn
+    def winning_move(self, board, chip):
+        # print(chip)
 
         #horizontal check
         for c in range(4):
             for r in range(6):
-                if self.board[r][c] == chip and self.board[r][c+1] == chip and self.board[r][c+2] == chip and self.board[r][c+3] == chip:
+                if board[r][c] == chip and board[r][c+1] == chip and board[r][c+2] == chip and board[r][c+3] == chip:
                     return True
         
         #vertical check
         for c in range(7):
             for r in range(3):
-                if self.board[r][c] == chip and self.board[r+1][c] == chip and self.board[r+2][c] == chip and self.board[r+3][c] == chip:
+                if board[r][c] == chip and board[r+1][c] == chip and board[r+2][c] == chip and board[r+3][c] == chip:
                     return True
         
         #upward diagonal check
         for c in range(4):
             for r in range(3):
-                if self.board[r][c] == chip and self.board[r+1][c+1] == chip and self.board[r+2][c+2] == chip and self.board[r+3][c+3] == chip:
+                if board[r][c] == chip and board[r+1][c+1] == chip and board[r+2][c+2] == chip and board[r+3][c+3] == chip:
                     return True
         
         #downward diagonal check
-        for c in range(3,7):
-            for r in range(3):
-                if self.board[r][c] == chip and self.board[r+1][c-1] == chip and self.board[r+2][c-2] == chip and self.board[r+3][c-3] == chip:
+        for c in range(4):
+            for r in range(3, 6):
+                if board[r][c] == chip and board[r-1][c+1] == chip and board[r-2][c+2] == chip and board[r-3][c+3] == chip:
                     return True
         
         return False
@@ -132,9 +132,7 @@ class Player:
             opp_piece = 1
         
         #TERMINAL NODE IF WINNING MOVE OR DRAW
-        return self.winning_move(board, piece) \
-            or self.winning_move(board, opp_piece) \
-            or len(self.get_valid_locations(board)) == 0
+        return self.winning_move(board, piece) or self.winning_move(board, opp_piece) or len(self.get_valid_locations(board)) == 0
 
     def get_next_open_row(self, board, col):
         for r in range(6):
@@ -145,15 +143,16 @@ class Player:
 
     def drop_piece(self, board, col, turn):
             
-        row = self.get_next_open_row(col)  #find earliest open row
-        board[row][col] = self.turn        #place piece
+        row = self.get_next_open_row(board, col)  #find earliest open row
+        board[row][col] = turn        #place piece
 
         return board
 
 
     def minimax(self, board,  AI, OPP, depth, alpha, beta, maximizingPlayer): #AI = cpu turn number, #OPP = opp turn #
         valid_locations = self.get_valid_locations(board)
-        is_terminal = self.is_terminal_node(board)
+        is_terminal = self.is_terminal_node(board, AI)
+        # print(AI)
 
         if depth == 0 or is_terminal:
             if is_terminal:
@@ -195,26 +194,55 @@ class Player:
                 if alpha >= beta:
                     break
             return column, value
-            
+        
 
-    def move(self, board, turn):
+    def move(self, turn, board):
         if(self.isBot):
-            match self.difficulty:  #Potentially pass in a list of available columns to optimize
-                case 1:
+            if(self.difficulty==1):  #Potentially pass in a list of available columns to optimize
                     col = random.randrange(1,7)
+                    while board[5][col] != 0:
+                          col = random.randrange(1,7)
                     return col
-                case 2:
-                    return 0    #Will use min/max algo
-                case 3:
+            elif(self.difficulty == 2):
+                col1 = random.randrange(1,7)
+                while board[5][col] != 0:
+                          col = random.randrange(1,7)
+                if(turn == 1):
+                        opp = 2
+                else:
+                    opp = 1
+                col2, score = self.minimax(board, turn, opp, depth=5, alpha=-math.inf, beta=math.inf, maximizingPlayer=True)
+
+                col = random.choice([col1, col2])
+                if(col == col1):
+                    print("random")
+                else:
+                    print("minmax")
+                return col
+
+            else:
                     if(turn == 1):
-                        opp = 0
+                        opp = 2
+                    else:
+                        opp = 1
                     col, score = self.minimax(board, turn, opp, depth=5, alpha=-math.inf, beta=math.inf, maximizingPlayer=True)
+                    # print(score)
                     return col
         
         else:   #This function probably changes for human when we have a GUI (based on position on screen)
-            action1 = True
-            while action1:
-                col = int(input("Enter column to place(1-7): ")) - 1
-                if col in [0, 1, 2, 3, 4, 5, 6]:
-                    action1 = False
-            return col
+            for e in pygame.event.get():
+                if click_btn1.isClicked():
+                    return 0
+                if click_btn2.isClicked():
+                    return 1
+                if click_btn3.isClicked():
+                    return 2
+                if click_btn4.isClicked():
+                    return 3
+                if click_btn5.isClicked():
+                    return 4
+                if click_btn6.isClicked():
+                    return 5
+                if click_btn7.isClicked():
+                    return 6
+

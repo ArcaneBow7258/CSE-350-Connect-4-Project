@@ -1,195 +1,183 @@
 import pygame
+pygame.init()
 import sys
 import numpy
-import game
+import game as gameLib
 import player
 import button
-
-#SCREEN STUFF
-pygame.init()
-
-S_WIDTH = 600
-S_HEIGHT = 600
-screen = pygame.display.set_mode((S_WIDTH, S_HEIGHT))
-pygame.display.set_caption("CSE350 Team 10 Connect-4")
-my_font = pygame.font.SysFont("monospace", 75)
-
-#player vars
+import menu as menuLib
+import tkinter
+from tkinter import Button
+from tkinter.messagebox import askyesno
+from tkinter import colorchooser
+from tkinter import simpledialog
 
 p1 = player.Player("Player 1", False, (255, 0, 0))
 p2 = player.Player("Player 2", False, (255, 255, 0))
-
-
-
 #Initialize Game
-game = game.Game(p1, p2)
-
-boardTopLeft =((S_WIDTH - game.B_WIDTH)/2, S_HEIGHT - game.B_HEIGHT)
-boardImage = pygame.Surface((game.B_WIDTH, game.B_HEIGHT))
-boardImage.fill((0, 0, 255))
-clickImage = pygame.Surface((70, 100))
-clickImage.fill((255, 255, 255))
-click_btn1 = button.Button(25, 20, clickImage)
-click_btn2 = button.Button(105, 20, clickImage)
-click_btn3 = button.Button(185, 20, clickImage)
-click_btn4 = button.Button(265, 20, clickImage)
-click_btn5 = button.Button(345, 20, clickImage)
-click_btn6 = button.Button(425, 20, clickImage)
-click_btn7 = button.Button(505, 20, clickImage)
-
 #fills every square on the board with an empty space
-for r in range(6):
-    for c in range(7):
-        pygame.draw.circle(boardImage,
-                            (0, 0, 0),
-                            (game.square/2 + c * game.square, game.square/2 + r * game.square),
-                            game.circleRad)
+# Event Loop
 
-
-# Begin Event loop
-review = False
-run = True
-
-
-def playTurn(game, col, run, review, screen):
-    if(game.players[game.turn - 1].isBot == False):
-        game.place(col, boardImage)
-        screen.fill((0,0,0))
-        screen.blits(((boardImage, boardTopLeft), (clickImage, click_btn1.rect.topleft), 
-                    (clickImage, click_btn2.rect.topleft), (clickImage, click_btn3.rect.topleft), 
-                    (clickImage, click_btn4.rect.topleft), (clickImage, click_btn5.rect.topleft), 
-                    (clickImage, click_btn6.rect.topleft), (clickImage, click_btn7.rect.topleft)))
-        pygame.display.update()
-        if game.checkWin():
-            print(f"{game.players[game.turn - 1].nickname} Wins!")
-            game.alert(f"{game.players[game.turn - 1].nickname} Wins!")
-            if not(game.askForReview()):
-                run = False
-            game.review(p1, p2, boardImage,game.record)
-            review = True
-
-    return run, review
-
-def playCPU(game, run, review, screen):
-    col = game.players[game.turn - 1].move(game.turn, game.board)
-    game.place(col, boardImage)
-    screen.fill((0,0,0))
-    screen.blits(((boardImage, boardTopLeft), (clickImage, click_btn1.rect.topleft), 
-                (clickImage, click_btn2.rect.topleft), (clickImage, click_btn3.rect.topleft), 
-                (clickImage, click_btn4.rect.topleft), (clickImage, click_btn5.rect.topleft), 
-                (clickImage, click_btn6.rect.topleft), (clickImage, click_btn7.rect.topleft)))
-    pygame.display.update()
-    if game.checkWin():
-        print(f"{game.players[game.turn - 1].nickname} Wins!")
-        game.alert(f"{game.players[game.turn - 1].nickname} Wins!")
-        if not(game.askForReview()):
-            run = False
-        game.review(p1, p2, boardImage,game.record)
-        review = True
     
-    return run, review
-
-
-while run:
     
+
+menuLoop = True
+appLoop = True
+run = False
+while appLoop:
+    menu=menuLib.Menu()
+    while menuLoop:
+        for e in pygame.event.get():
+            if menu.play_button.isClicked():
+                print('START')
+                menuLoop = False
+                game = gameLib.Game(p1, p2)
+                review = False
+                run = True
+                break
+            if menu.exit_button.isClicked():
+                menuLoop = False
+                appLoop = False
+                print('EXIT')
+                break;
+            if menu.setting_button.isClicked():
+                print('SETTINGS')
+                #Something something settings
+                nn = simpledialog.askstring("Player 2 Nickame", "How should we call player 1?")
+                color = colorchooser.askcolor(title ="Choose color for player 1")
+                bot =  askyesno(title="Player 1", message="Is player 1 a bot?")
+                diff = 0
+                while bot:
+                    diff = simpledialog.askstring("Bot Difficulty", "Easy medium or hard?")
+                    match diff.lower():
+                        case 'easy':
+                            bot = False
+                            diff = 1
+                        case 'medium':
+                            bot = False
+                            diff = 2
+                        case 'hard':
+                            bot = False
+                            diff = 3
+                        case _:
+                            bot = True
+                            tkinter.messagebox.showinfo('Settings error', "Please pick an appropiate setting!")
+                p1 = player.Player(nn, diff != 0, color[0], diff)
+                nn = simpledialog.askstring("Player 2 Nickame", "How should we call player 2?")
+                color = colorchooser.askcolor(title ="Choose color for player 2")
+                
+                bot =  askyesno(title="Player 2", message="Is player 2 a bot?")
+                diff = 0
+                while bot:
+                    diff = simpledialog.askstring("Bot Difficulty", "Easy medium or hard?")
+                    match diff.lower():
+                        case 'easy':
+                            bot = False
+                            diff = 1
+                        case 'medium':
+                            bot = False
+                            diff = 2
+                        case 'hard':
+                            bot = False
+                            diff = 3
+                        case _:
+                            bot = True
+                            tkinter.messagebox.showinfo('Settings error', "Please pick an appropiate setting!")
+                p2 = player.Player(nn,diff != 0, color[0], diff)
+                            
+                    
+                    
+                
         
 
-    screen.fill((0,0,0))
-
-    screen.blits(((boardImage, boardTopLeft), (clickImage, click_btn1.rect.topleft), 
-                (clickImage, click_btn2.rect.topleft), (clickImage, click_btn3.rect.topleft), 
-                (clickImage, click_btn4.rect.topleft), (clickImage, click_btn5.rect.topleft), 
-                (clickImage, click_btn6.rect.topleft), (clickImage, click_btn7.rect.topleft)))
-    
-    # There is also event.get(), which returns an iterable of all events added to the queue during that iteration
-    for e in pygame.event.get():
-        if e.type == pygame.QUIT:
-            run = False
-    
-        if click_btn1.isClicked():
-            run, review = playTurn(game, 0, run, review, screen)
-
-        if click_btn2.isClicked():
-
-            run, review = playTurn(game, 1, run, review, screen)
-            # col = game.players[game.turn - 1].move(game.turn - 1, game.board)
-            # CPUTurn(col)
-
-        if click_btn3.isClicked():
-            run, review = playTurn(game, 2, run, review, screen)
-
-        if click_btn4.isClicked():
-            run, review = playTurn(game, 3, run, review, screen)
-
-        if click_btn5.isClicked():
-            run, review = playTurn(game, 4, run, review, screen)
-
-        if click_btn6.isClicked():
-            run, review = playTurn(game, 5, run, review, screen)
-            
-
-        if click_btn7.isClicked():
-            run, review = playTurn(game, 6, run, review, screen)
-
-    if(game.players[game.turn - 1].isBot == True):
-        run, review = playCPU(game, run, review, screen)
-
-
-    if len(game.record) == 42 and run:
-        print("Draw!")
-        game.alert("Draw!")
-        if not(game.askForReview()):
-            run = False
-        game.review(p1, p2, boardImage,game.record)
-        review = True
-
-    if(review == True):
-        review = False
-        reviewRecord = game.record.copy()
-        index = 0
-        while (run):
-            print(repr(index) + ' ' + repr(len(reviewRecord)) )
-            game.turn = index % 2 + 1
-            screen.fill((0,0,0))
-
-            screen.blits(((boardImage, boardTopLeft), (clickImage, click_btn3.rect.topleft), 
-                        (clickImage, click_btn5.rect.topleft)))
-            
-            # There is also event.get(), which returns an iterable of all events added to the queue during that iteration
-            for e in pygame.event.get():
-                if e.type == pygame.QUIT:
-                    run = False
-            if click_btn5.isClicked():
-                if(index < len(reviewRecord)):
-                    game.place(reviewRecord[index][1], boardImage)
-                    index += 1
-                else:
-                    game.alert("no more moves")
-            if click_btn3.isClicked():
-                if(index>=1):
-                    index-=1
-                    row = reviewRecord[index][0]
-                    col = reviewRecord[index][1]
-                    game.board[row][col] = 0
-                    pygame.draw.circle(boardImage,
-                            (0,0,0),
-                            (game.square/2 + col * game.square, game.square/2 + (5-row) * game.square),
-                            game.circleRad)
-
-                    pygame.display.update((S_WIDTH - game.B_WIDTH)/2 + c * game.square, (S_HEIGHT - game.B_HEIGHT) + (5-row) * game.square, game.square, game.square)
-                else:
-                    game.alert("no previous moves")
-
-
-            
-            pygame.display.update()
+        pygame.display.update()
+    menuLoop = True
+    while run:
+        # There is also event.get(), which returns an iterable of all events added to the queue during that iteration
+        for e in pygame.event.get():
+            if e.type == pygame.QUIT:
+                run = False
+            if game.click_btn1.isClicked():
+                run, review = game.playTurn(0, run, review)
                 
+            if game.click_btn2.isClicked():
+                run, review = game.playTurn(1, run, review)
+
+            if game.click_btn3.isClicked():
+                run, review = game.playTurn(2, run, review)
+
+            if game.click_btn4.isClicked():
+                run, review = game.playTurn(3, run, review)
+
+            if game.click_btn5.isClicked():
+                run, review = game.playTurn(4, run, review)
+
+            if game.click_btn6.isClicked():
+                run, review = game.playTurn(5, run, review)
+    
+            if game.click_btn7.isClicked():
+                run, review = game.playTurn(6, run, review)
+
+        if(game.players[game.turn - 1].isBot == True):
+            run, review = game.playTurn(-1, run, review)
 
 
-    pygame.display.update()
+        if len(game.record) == 42 and run:
+            print("Draw!")
+            game.alert("Draw!")
+            if not(game.askForReview()):
+                run = False
+            game.review(p1, p2, game.boardImage,game.record)
+            review = True
+
+        if(review == True):
+            review = False
+            reviewRecord = game.record.copy()
+            index = 0
+            while (run):
+                    
+                #print(repr(index) + ' ' + repr(len(reviewRecord)) )
+                game.turn = index % 2 + 1
+                game.reviewUpdate()
+                    
+                # There is also event.get(), which returns an iterable of all events added to the queue during that iteration
+                for e in pygame.event.get():
+                    if e.type == pygame.QUIT:
+                        run = False
+                    if game.click_btn5.isClicked():
+                        if(index < len(reviewRecord)):
+                            game.place(reviewRecord[index][1], True)
+                            index += 1
+                        else:
+                            answer =  askyesno(title="Quit?", message="Out of moves. Would you like to quit?")
+                            if answer:
+                                run = False
+                                review = False
+                                menuLoop = True
+                                break
+                                
+                            
+                            
+                    if game.click_btn3.isClicked():
+                        if(index>=1):
+                            index-=1
+                            row = reviewRecord[index][0]
+                            col = reviewRecord[index][1]
+                            game.unplace(row,col)
+                        else:
+                            game.alert("no previous moves")
+
+
+                    
+                pygame.display.update()
+                        
+
+
+        pygame.display.update()
+
 
 # When our main loop is no longer running, we want to stop execution
-
 # Calling pygame.quit() before sys.exit() is best practice to avoid stalling
 pygame.quit()
 sys.exit()
+print('we out')
