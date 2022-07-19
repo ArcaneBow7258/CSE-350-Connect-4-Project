@@ -49,6 +49,8 @@ while appLoop:
                 diff = 0
                 while bot:
                     diff = simpledialog.askstring("Bot Difficulty", "Easy medium or hard?")
+                    if diff is None:
+                        diff = 'easy'
                     match diff.lower():
                         case 'easy':
                             bot = False
@@ -70,6 +72,8 @@ while appLoop:
                 diff = 0
                 while bot:
                     diff = simpledialog.askstring("Bot Difficulty", "Easy medium or hard?")
+                    if diff is None:
+                        diff = 'easy'
                     match diff.lower():
                         case 'easy':
                             bot = False
