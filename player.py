@@ -205,7 +205,7 @@ class Player:
                     return col
             elif(self.difficulty == 2):
                 col1 = random.randrange(1,7)
-                while board[5][col] != 0:
+                while board[5][col1] != 0:
                           col = random.randrange(1,7)
                 if(turn == 1):
                         opp = 2
