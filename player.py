@@ -31,7 +31,10 @@ class Player:
 
     #Sets Name
     def setName(self):
+        orig = str(self.nickname)
         self.nickname = simpledialog.askstring("Player Nickame", "How should we call this player?")
+        if(self.nickname is None or self.nickname==""):
+            self.nickname = orig
 
 
 
