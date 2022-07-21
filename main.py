@@ -65,7 +65,6 @@ while appLoop:
                 break;
             if menu.setting_button.isClicked():
                 print('SETTINGS')
-
                 #Pop up Setting Menu
                 Tk().withdraw()
                 root = Toplevel()  
@@ -118,7 +117,7 @@ while appLoop:
                 Medium2.grid(row=4, column=1)
                 Hard2.grid(row=5, column=1)
 
-                
+ 
 
                 #P2 Color Button
                 colorButton2 = Button(root, bg=_from_rgb(p2.color), text = "P2 Color", command=lambda: [p2.setColor(), updateColor(colorButton2, p2)], height = 1, width = 10)
