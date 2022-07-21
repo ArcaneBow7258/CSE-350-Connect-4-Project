@@ -3,6 +3,9 @@ import random
 import button
 
 import math
+from tkinter import colorchooser
+from tkinter import simpledialog
+
 
 class Player:
 
@@ -13,6 +16,27 @@ class Player:
         self.color = color
         self.difficulty = difficulty
         self.score = 0
+    
+    #Sets Bot or Human
+    def setBot(self, value):
+        self.difficulty = value
+        if(value == 0):
+            self.isBot = False
+        else:
+            self.isBot = True
+
+    #Sets Color
+    def setColor(self):
+        self.color = colorchooser.askcolor(title =("Choose Color for ", self.nickname))[0]
+
+    #Sets Name
+    def setName(self):
+        orig = str(self.nickname)
+        self.nickname = simpledialog.askstring("Player Nickame", "How should we call this player?")
+        if(self.nickname is None or self.nickname==""):
+            self.nickname = orig
+
+
 
 
     def evaluate_window(self, window, piece):
@@ -206,7 +230,8 @@ class Player:
             elif(self.difficulty == 2):
                 col1 = random.randrange(1,7)
                 while board[5][col1] != 0:
-                          col = random.randrange(1,7)
+                          col1 = random.randrange(1,7)
+
                 if(turn == 1):
                         opp = 2
                 else:
@@ -228,6 +253,7 @@ class Player:
                     col, score = self.minimax(board, turn, opp, depth=5, alpha=-math.inf, beta=math.inf, maximizingPlayer=True)
                     # print(score)
                     return col
+            
         
         else:   #This function probably changes for human when we have a GUI (based on position on screen)
             for e in pygame.event.get():
